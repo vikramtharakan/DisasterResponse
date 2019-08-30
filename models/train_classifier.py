@@ -49,7 +49,7 @@ def build_model():
     
     # specify parameters for grid search
     parameters = {'vectorizer__max_df': [.8],
-                  'clf__estimator__n_estimators': [1]
+                  'clf__estimator__n_estimators': [100]
                  }
     
     # create grid search object
