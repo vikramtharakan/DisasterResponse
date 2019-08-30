@@ -118,6 +118,10 @@ def save_model(model, model_filepath):
 
 
 def main():
+    '''
+    Main Function that creates ML pipeline using functions listed above. Data is Loaded, a classifier is fit on the data,
+    the model is evaluated, and then the model is saved in a pkl file to be used by a webapp
+    '''
     if len(sys.argv) == 3:
         database_filepath, model_filepath = sys.argv[1:]
         print('Loading data...\n    DATABASE: {}'.format(database_filepath))
