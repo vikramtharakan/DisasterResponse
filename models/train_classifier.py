@@ -19,6 +19,15 @@ import pickle
 
 
 def load_data(database_filepath):
+    '''
+    Function to load data from a specified sqlite database
+    -- Input --
+        database_filepah: Location path to sqlite database
+    -- Output --
+        X: (pd.Series) Input variable for classifier. Contains text for messages
+        Y: (pd.DataFrame) Output variables for classifier. Contains 36 categories 
+        category_names: Column names for the 36 categories in Y. Needed for evaluate_model function
+    '''
     engine = create_engine('sqlite:///'+database_filepath)
     df = pd.read_sql_table('disasterdata', engine)
     df_clean = df[np.isfinite(df['related'])]
@@ -29,6 +38,13 @@ def load_data(database_filepath):
 
 
 def tokenize(text):
+    '''
+    Function to be used in place of the built-in tokenizer in CountVectorize
+    -- Input --
+        text: Contains raw textfor each message
+    -- Output --
+        clean_words: Tokenized/lematized version of input text
+    '''
     text = text.lower()
     text = re.sub(r"[^a-zA-Z0-9]"," ", text)
     words = word_tokenize(text)
@@ -40,6 +56,13 @@ def tokenize(text):
 
 
 def build_model():
+    '''
+    Function to build the model pipeline and create a grid search object
+    -- Input --
+        N/A
+    -- Output --
+        cv: Grid Search Object that contains our created pipeline
+    '''
     pipeline = Pipeline([
         ('vectorizer', CountVectorizer(tokenizer = tokenize)),
         ('tfidf', TfidfTransformer()),
@@ -58,6 +81,16 @@ def build_model():
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
+    '''
+    Function to evaluate the model and return accuracy scores
+    -- Input --
+        model: any model pipeline or grid search object that has been built/fit using our custom pipeline
+        X_test: Input variables to test how the classifier performs
+        Y_test: Output variables to compare how the classifier performs on the test input
+        category_names: Names of the 36 categories in Y. Used to print out accuracy results for each category
+    -- Output --
+        N/A (although it does print out accuracy results, nothing is returned by this function)
+    '''
     y_pred = model.predict(X_test)
     df_ypred = pd.DataFrame(y_pred, columns = Y_test.columns)
     df_ypred = df_ypred.reset_index(drop=True)
@@ -72,6 +105,14 @@ def evaluate_model(model, X_test, Y_test, category_names):
     
 
 def save_model(model, model_filepath):
+    '''
+    Function to save the model as a pickle file. This can eventually be used by our web app
+    -- Input --
+        model: any model pipeline or grid search object that has been built/fit using our custom pipeline
+        model_filepath: Where you want the pkl file to be saved
+    -- Output --
+        cv: Grid Search Object that contains our created pipeline
+    '''
     file_name = model_filepath
     pickle.dump(model, open(file_name, 'wb'))
 
