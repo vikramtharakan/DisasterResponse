@@ -10,7 +10,9 @@ Created a pipeline to filter and classify messages sent during disasters
 
 <a name="background"></a>
 ## Background
-This repository contains a ML pipeline that can classifier messages sent during disasters 
+When a disaster strikes, there are a flood of messages that disaster response teams have to respond to. The goal of this project is to creat a classifier that is able to classifier these methods into different categories in order to help the response teams
+
+In order to do this I first created an ETL pipeline that extracts the data, cleans it, and then uploads it to a database. Then I created a machine learning pipeline that loads the data from the database, and then trains a multioutputclassifier model on the text from the database. From here I was able to manipulate parameters to get my final accuracy score up to about 93%. 
 
 <a name="startup"></a>
 ## Run Your own Disaster Response Classifier!
